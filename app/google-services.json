@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "765945204274",
+    "project_id": "fir-subida-archivos",
+    "storage_bucket": "fir-subida-archivos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765945204274:android:47f097eb74fc34a732362b",
+        "android_client_info": {
+          "package_name": "com.example.firebase_subida_archivos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765945204274-38r5etl1jfk4445ja912bu9e9nhtmnb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebase_subida_archivos",
+            "certificate_hash": "feb2f7f7e451a6e11b1a3c532006455898c2f2e6"
+          }
+        },
+        {
+          "client_id": "765945204274-brr206ueuqpo7ll5fkpqdduoheno7m4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu_K3tO0MNPzgTcTz6gD-esQi21uYwz08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765945204274-brr206ueuqpo7ll5fkpqdduoheno7m4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
