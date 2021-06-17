@@ -6,13 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/buttonSalir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="logOut"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="Salir" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/buttonSalir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="logOut"
+            android:layout_gravity="right"
+            android:text="Salir" />
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:contentDescription="TODO"
+            android:paddingTop="20dp"
+            android:layout_weight="1"
+            android:text="Hello World!" />
+
+        <Button
+            android:id="@+id/buttonSubirArchivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:onClick="subirArchivo"
+            android:text="Nuevo archivo" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
