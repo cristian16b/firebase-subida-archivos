@@ -19,25 +19,51 @@
             android:onClick="logOut"
             android:layout_gravity="right"
             android:text="Salir" />
+        <!--Linear Layout with horizontal orientation
+    and other properties-->
 
-
+        <!--Image View for showing image choosen from gallery-->
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:contentDescription="TODO"
-            android:paddingTop="20dp"
+            android:id="@+id/imgView"
             android:layout_weight="1"
-            android:text="Hello World!" />
-
-        <Button
-            android:id="@+id/buttonSubirArchivo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:onClick="subirArchivo"
-            android:text="Nuevo archivo" />
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/layout_button"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--Button for choosing image from gallery-->
+            <Button
+                android:id="@+id/btnChoose"
+                android:text="Choose"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <!--Button for uploading image-->
+            <Button
+                android:id="@+id/btnUpload"
+                android:text="Upload"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+
+<!--        <Button-->
+<!--            android:id="@+id/buttonSubirArchivo"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:onClick="subirArchivo"-->
+<!--            android:text="Nuevo archivo" />-->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

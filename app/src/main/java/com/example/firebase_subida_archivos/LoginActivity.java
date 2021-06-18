@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         initGoogleClient();
         mAuthFB = FirebaseAuth.getInstance();
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void initViews() {
