@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     // view for image view
     private ImageView imageView;
 
+    // textview detalles
+    private TextView detallesText;
+
     // Uri indicates, where the image will be picked from
     private Uri filePath;
 
@@ -69,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
         // initialise views
         btnSelect = findViewById(R.id.btnChoose);
         btnUpload = findViewById(R.id.btnUpload);
-        imageView = findViewById(R.id.imgView);
+//        imageView = findViewById(R.id.imgView);
+        detallesText = findViewById(R.id.detallesArchivo);
 
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
@@ -89,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Toast
-                        .makeText(MainActivity.this,
-                                FirebaseAuth.getInstance().getCurrentUser()+"",
-                                Toast.LENGTH_LONG)
-                        .show();
+//                Toast
+//                        .makeText(MainActivity.this,
+//                                FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+//                                Toast.LENGTH_LONG)
+//                        .show();
                 uploadImage();
             }
         });
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(
                 Intent.createChooser(
                         intent,
-                        "Select Image from here..."),
+                        "Seleccionar archivo..."),
                 PICK_IMAGE_REQUEST);
     }
 
@@ -147,22 +152,28 @@ public class MainActivity extends AppCompatActivity {
 
             // Get the Uri of data
             filePath = data.getData();
-            try {
+
+            File file = new File(filePath.getPath());
+            String detalle = "Archivo seleccionado: " + file.getName();
+
+            detallesText.setText(detalle);
+//            try {
 
                 // Setting image on image view using Bitmap
-                Bitmap bitmap = MediaStore
-                        .Images
-                        .Media
-                        .getBitmap(
-                                getContentResolver(),
-                                filePath);
-                imageView.setImageBitmap(bitmap);
-            }
+//                Bitmap bitmap = MediaStore
+//                        .Images
+//                        .Media
+//                        .getBitmap(
+//                                getContentResolver(),
+//                                filePath);
+//                imageView.setImageBitmap(bitmap);
 
-            catch (IOException e) {
-                // Log the exception
-                e.printStackTrace();
-            }
+//            }
+//
+//            catch (IOException e) {
+//                // Log the exception
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -177,12 +188,18 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setTitle("Subiendo...");
             progressDialog.show();
 
+            File file = new File(filePath.getPath());
+
             // Defining the child of storageReference
             StorageReference ref
                     = storageReference
                     .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
+                            FirebaseAuth.getInstance().getCurrentUser().getEmail()
+                                    +
+                            "/"
+                                    + file.getName());
+
+            detallesText.setText("");
 
             // adding listeners on upload
             // or failure of image
