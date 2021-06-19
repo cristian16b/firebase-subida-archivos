@@ -9,72 +9,60 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:weightSum="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
         <Button
             android:id="@+id/buttonSalir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="logOut"
             android:layout_gravity="right"
+            android:onClick="logOut"
             android:text="Salir" />
-        <!--Linear Layout with horizontal orientation
-    and other properties-->
 
-        <!--Image View for showing image choosen from gallery-->
-<!--        <ImageView-->
-<!--            android:id="@+id/imgView"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/detallesArchivo"
-            android:textSize="15dp"
-            android:layout_weight="0.1"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="-- Seleccione un archivo --" />
+            android:hint="-- Seleccione un archivo --"
+            android:textSize="15dp" />
 
         <LinearLayout
-            android:id="@+id/layout_button"
-            android:orientation="horizontal"
-            android:layout_alignParentTop="true"
-            android:weightSum="2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/listaArchivos"
+            android:orientation="horizontal">
 
-            <!--Button for choosing image from gallery-->
+
+
+            <!--Linear Layout with horizontal orientation
+        and other properties-->
+
+            <!--Image View for showing image choosen from gallery-->
+            <!--        <ImageView-->
+            <!--            android:id="@+id/imgView"-->
+            <!--            android:layout_weight="1"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="match_parent" />-->
+
+
             <Button
                 android:id="@+id/btnChoose"
-                android:text="Seleccionar"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar" />
 
-            <!--Button for uploading image-->
             <Button
                 android:id="@+id/btnUpload"
-                android:text="Subir"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subir" />
         </LinearLayout>
 
 
-
-
-<!--        <Button-->
-<!--            android:id="@+id/buttonSubirArchivo"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:onClick="subirArchivo"-->
-<!--            android:text="Nuevo archivo" />-->
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

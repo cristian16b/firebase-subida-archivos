@@ -14,8 +14,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +66,12 @@ public class MainActivity extends AppCompatActivity {
     // instance for firebase storage and StorageReference
     FirebaseStorage storage;
     StorageReference storageReference;
-    
+
+    //lista de archivos subidos
+    private ListView lv1;
+
+    private String[] archivos = {};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 uploadImage();
             }
         });
+
+        lv1=findViewById(R.id.listaArchivos);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
+        lv1.setAdapter(adapter);
+
     }
 
     public void logOut(View view) {
