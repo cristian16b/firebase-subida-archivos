@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        lv1=findViewById(R.id.listaArchivos);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
-        lv1.setAdapter(adapter);
+//        lv1=findViewById(R.id.listaArchivos);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
+//        lv1.setAdapter(adapter);
 
     }
 
