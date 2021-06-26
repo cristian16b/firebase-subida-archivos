@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // on pressing btnUpload uploadImage() is called
+        // on pressing btnUpload uploadFile() is called
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 //                                FirebaseAuth.getInstance().getCurrentUser().getEmail(),
 //                                Toast.LENGTH_LONG)
 //                        .show();
-                uploadImage();
+                uploadFile();
             }
         });
 
@@ -165,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
                             // All the items under listRef.
                             String i = item.getName();
                             Log.i("ingreso","bucle 2 vuelta"+i);
+
+                            donwloadFile(i);
                         }
                     }
                 })
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // UploadImage method
-    private void uploadImage()
+    private void uploadFile()
     {
         if (filePath != null) {
 
@@ -333,5 +335,10 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
         }
+    }
+
+    private void donwloadFile(String nombre){
+
+
     }
 }
