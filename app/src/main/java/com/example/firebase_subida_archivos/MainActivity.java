@@ -77,15 +77,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get the Firebase  storage reference
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            // Start sign in/sign up activity
+            Intent i = new Intent(this, LoginActivity.class );
+            startActivity(i);
+        } else {
+            // User is already signed in. Therefore, display
+            // a welcome Toast
+            Toast.makeText(this,
+                    "Bienvenido " + FirebaseAuth.getInstance()
+                            .getCurrentUser()
+                            .getDisplayName(),
+                    Toast.LENGTH_LONG)
+                    .show();
+
+            // Load chat room contents
+            mostrarArchivos();
+        }
+
+
         // initialise views
         btnSelect = findViewById(R.id.btnChoose);
         btnUpload = findViewById(R.id.btnUpload);
 //        imageView = findViewById(R.id.imgView);
         detallesText = findViewById(R.id.detallesArchivo);
 
-        // get the Firebase  storage reference
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
         // on pressing btnSelect SelectImage() is called
         btnSelect.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +133,52 @@ public class MainActivity extends AppCompatActivity {
 //        lv1=findViewById(R.id.listaArchivos);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
 //        lv1.setAdapter(adapter);
+    }
 
+
+    protected void mostrarArchivos() {
+        //Log.i("directorio",FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
+//        Log.i("directorio",storage.toString());
+
+//       Si recorro los archivos que subio el usuario xxxxx@correo.com uso
+        StorageReference listRef = storage.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
+
+//        Si quiero recorrer los directorios en el indice del storage uso:
+//        StorageReference listRef = storage.getReference().child("/");
+
+        listRef.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+
+                        Log.i("ingreso","uff magia algo paso");
+
+//                       Primer bucle recorre directorios
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            // All the prefixes under listRef.
+                            // You may call listAll() recursively on them.
+                            Log.i("ingreso","bucle 1 vuelta " + prefix.getName());
+                        }
+
+//                        segundo bucle recorre los archivos
+                        for (StorageReference item : listResult.getItems()) {
+                            // All the items under listRef.
+                            String i = item.getName();
+                            Log.i("ingreso","bucle 2 vuelta"+i);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Uh-oh, an error occurred!
+                                        Toast
+                        .makeText(MainActivity.this,
+                                "Ocurrio un error al intentar recuperar los archivos, cierre session a intente ingresar de nuevo.",
+                                Toast.LENGTH_LONG)
+                        .show();
+                    }
+                });
     }
 
     public void logOut(View view) {

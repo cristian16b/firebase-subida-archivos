@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!---->
-<!--Referencia de como usar los pesos en los linear-->
-<!--https://www.iteramos.com/pregunta/5060/diseno-lineal-y-el-peso-en-android-->
-<!---->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:padding="5dp"
-    android:orientation="vertical" >
+    tools:context=".MainActivity">
 
 <!--    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:weightSum="5"> <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" /> <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="3" android:text="2" /> <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" /> </LinearLayout>-->
     <LinearLayout
