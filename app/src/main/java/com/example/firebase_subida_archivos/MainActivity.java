@@ -3,6 +3,8 @@ package com.example.firebase_subida_archivos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 import java.util.UUID;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -15,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,6 +50,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static android.R.layout.simple_list_item_1;
+
 public class MainActivity extends AppCompatActivity {
 
     // views for button
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
     //lista de archivos subidos
     private ListView lv1;
 
-    private String[] archivos = {};
+    private ArrayList lista;
+
+    ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +88,18 @@ public class MainActivity extends AppCompatActivity {
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        lv1=findViewById(R.id.listaArchivos);
+        lista = new ArrayList<>();
+        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
+        lv1.setAdapter(arrayAdapter);
+
+        // initialise views
+        btnSelect = findViewById(R.id.btnChoose);
+        btnUpload = findViewById(R.id.btnUpload);
+//        imageView = findViewById(R.id.imgView);
+        detallesText = findViewById(R.id.detallesArchivo);
+
 
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Start sign in/sign up activity
@@ -97,16 +116,8 @@ public class MainActivity extends AppCompatActivity {
                     .show();
 
             // Load chat room contents
-//            mostrarArchivos();
+            mostrarArchivos();
         }
-
-
-        // initialise views
-        btnSelect = findViewById(R.id.btnChoose);
-        btnUpload = findViewById(R.id.btnUpload);
-//        imageView = findViewById(R.id.imgView);
-        detallesText = findViewById(R.id.detallesArchivo);
-
 
         // on pressing btnSelect SelectImage() is called
         btnSelect.setOnClickListener(new View.OnClickListener() {
@@ -131,17 +142,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        lv1=findViewById(R.id.listaArchivos);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
-//        lv1.setAdapter(adapter);
-
-        donwloadFile("12225");
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
+                //tv1.setText("Población de "+ lv1.getItemAtPosition(i) + " es "+ habitantes[i]);
+            }
+        });
     }
 
 
     protected void mostrarArchivos() {
-        //Log.i("directorio",FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
-//        Log.i("directorio",storage.toString());
+
+        if(!lista.isEmpty()) {
+            lista.clear();
+        }
+//
 
 //       Si recorro los archivos que subio el usuario xxxxx@correo.com uso
         StorageReference listRef = storage.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
@@ -167,11 +182,19 @@ public class MainActivity extends AppCompatActivity {
                         for (StorageReference item : listResult.getItems()) {
                             // All the items under listRef.
                             String i = item.getName();
-                            Log.i("ingreso","bucle 2 vuelta"+i + item.getPath());
+                            Log.i("ingreso","bucle 2 vuelta"+i + item.getName());
 
 //                            donwloadFile(i);
 
+                            lista.add(item.getName());
+//                            arrayAdapter.notifyDataSetChanged();
+//                            Log.i("vector",lista.toString());
                         }
+
+                        if(!lista.isEmpty()) {
+                            arrayAdapter.notifyDataSetChanged();
+                       }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -240,23 +263,6 @@ public class MainActivity extends AppCompatActivity {
             String detalle = "Archivo seleccionado: " + file.getName();
 
             detallesText.setText(detalle);
-//            try {
-
-                // Setting image on image view using Bitmap
-//                Bitmap bitmap = MediaStore
-//                        .Images
-//                        .Media
-//                        .getBitmap(
-//                                getContentResolver(),
-//                                filePath);
-//                imageView.setImageBitmap(bitmap);
-
-//            }
-//
-//            catch (IOException e) {
-//                // Log the exception
-//                e.printStackTrace();
-//            }
         }
     }
 
@@ -303,6 +309,8 @@ public class MainActivity extends AppCompatActivity {
                                                     "Archivo subido!!",
                                                     Toast.LENGTH_LONG)
                                             .show();
+
+                                    mostrarArchivos();
                                 }
                             })
 
