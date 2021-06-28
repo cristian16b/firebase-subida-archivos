@@ -9,12 +9,14 @@ import java.util.UUID;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Uri indicates, where the image will be picked from
     private Uri filePath;
+    private String displayName;
 
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
@@ -145,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int i, long l) {
-                //tv1.setText("Población de "+ lv1.getItemAtPosition(i) + " es "+ habitantes[i]);
+                donwloadFile(lv1.getItemAtPosition(i).toString());
+//                Log.i("seleccionado=",lv1.getItemAtPosition(i).toString());
             }
         });
     }
@@ -259,8 +263,27 @@ public class MainActivity extends AppCompatActivity {
             // Get the Uri of data
             filePath = data.getData();
 
-            File file = new File(filePath.getPath());
-            String detalle = "Archivo seleccionado: " + file.getName();
+            Uri uri = data.getData();
+            String uriString = uri.toString();
+            File myFile = new File(uriString);
+            displayName = null;
+
+            if (uriString.startsWith("content://")) {
+                Cursor cursor = null;
+                try {
+                    cursor = this.getContentResolver().query(uri, null, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            } else if (uriString.startsWith("file://")) {
+                displayName = myFile.getName();
+            }
+
+            String detalle = "Archivo seleccionado: " + displayName;
+            Log.i("detalle",displayName);
 
             detallesText.setText(detalle);
         }
@@ -286,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseAuth.getInstance().getCurrentUser().getEmail()
                                     +
                             "/"
-                                    + file.getName());
+                                    + displayName);
 
             detallesText.setText("");
 
@@ -365,14 +388,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 // Data for "images/island.jpg" is returns, use this as needed
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+//                Toast
+//                        .makeText(MainActivity.this,
+//                                "Archivo descargado!!",
+//                                Toast.LENGTH_LONG)
+//                        .show();
+//                Log.i("archivo url",uri.toString());
+//                detallesText.setText(uri.toString());
+
                 progressDialog.dismiss();
-                Toast
-                        .makeText(MainActivity.this,
-                                "Archivo descargado!!",
-                                Toast.LENGTH_LONG)
-                        .show();
-                Log.i("archivo url",uri.toString());
-                detallesText.setText(uri.toString());
             }
 
         }).addOnFailureListener(new OnFailureListener() {
