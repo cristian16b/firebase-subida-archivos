@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     .show();
 
             // Load chat room contents
-            mostrarArchivos();
+//            mostrarArchivos();
         }
 
 
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
 //        lv1=findViewById(R.id.listaArchivos);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, archivos);
 //        lv1.setAdapter(adapter);
+
+        donwloadFile("12225");
     }
 
 
@@ -164,9 +167,10 @@ public class MainActivity extends AppCompatActivity {
                         for (StorageReference item : listResult.getItems()) {
                             // All the items under listRef.
                             String i = item.getName();
-                            Log.i("ingreso","bucle 2 vuelta"+i);
+                            Log.i("ingreso","bucle 2 vuelta"+i + item.getPath());
 
-                            donwloadFile(i);
+//                            donwloadFile(i);
+
                         }
                     }
                 })
@@ -338,7 +342,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void donwloadFile(String nombre){
+        String path = FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+nombre;
+        Log.i("ruta",path);
+        StorageReference fileRef = storageReference.child(path);
 
+
+        // Code for showing progressDialog while uploading
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Bajando...");
+        progressDialog.show();
+
+        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                progressDialog.dismiss();
+                Toast
+                        .makeText(MainActivity.this,
+                                "Archivo descargado!!",
+                                Toast.LENGTH_LONG)
+                        .show();
+                Log.i("archivo url",uri.toString());
+                detallesText.setText(uri.toString());
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                progressDialog.dismiss();
+                Toast
+                        .makeText(MainActivity.this,
+                                "Ocurrio un error: " + exception.getMessage(),
+                                Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
 
     }
 }

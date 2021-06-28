@@ -54,7 +54,9 @@
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
                     android:hint="-- Seleccione un archivo --"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+        android:autoLink="web"
+                    />
 
 <!--        <Button-->
 <!--            android:layout_width="match_parent"-->
