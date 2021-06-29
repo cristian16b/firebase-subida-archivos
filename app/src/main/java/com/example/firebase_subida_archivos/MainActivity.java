@@ -271,11 +271,48 @@ public class MainActivity extends AppCompatActivity {
             // obtengo el nombre del archivo
             obtenerNombreArchivo(uri,uriString,myFile);
 
-            String detalle = "Archivo seleccionado: " + displayName;
+            //  obtengo el tamaño
+//            Log.i("peso",esMayor10megas(uri,uriString,myFile) + "");
 
-            detallesText.setText(detalle);
+            if(esMayor10megas(uri,uriString,myFile)) {
+                filePath = null; displayName = null;
+                Toast
+                        .makeText(MainActivity.this,
+                                "Su archivo no puede ser subido porque pesa mas de 10 MegaBytes.",
+                                Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                String detalle = "Archivo seleccionado: " + displayName;
+                //muestro el archivo seleccionado
+                detallesText.setText(detalle);
+            }
         }
     }
+
+    private boolean esMayor10megas(Uri uri,String uriString,File myFile) {
+        boolean aux = false;
+        Cursor cursor = null;
+        String size = "0";
+        try {
+            cursor = this.getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                size = cursor.getString(cursor.getColumnIndex(OpenableColumns.SIZE));
+            }
+
+            //transform in MB
+            Long sizeInMb = Long.valueOf(size) / (1024 * 1024);
+//            Log.i("peso",sizeInMb.toString());
+            if(sizeInMb>10){
+                aux = true;
+            }
+
+        } finally {
+            cursor.close();
+        }
+
+        return aux;
+    }
+
 
     private void obtenerNombreArchivo(Uri uri,String uriString,File myFile) {
         if (uriString.startsWith("content://")) {
