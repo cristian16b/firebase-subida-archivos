@@ -25,10 +25,15 @@
                     android:id="@+id/buttonSalir"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_weight="0.50"
+                    android:layout_weight="0.10"
                     android:layout_gravity="right"
                     android:onClick="logOut"
                     android:text="Logout" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
 <!--        <Button-->
 <!--            android:layout_width="match_parent"-->
@@ -39,7 +44,7 @@
         <ListView
             android:id="@+id/listaArchivos"
             android:layout_width="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:layout_height="0dp" />
 
 <!--        <Button-->
@@ -48,14 +53,19 @@
 <!--            android:layout_weight="1"-->
 <!--            android:text="3" />-->
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
                 <TextView
                     android:id="@+id/detallesArchivo"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.1"
                     android:hint="-- Seleccione un archivo --"
                     android:textSize="15dp"
-        android:autoLink="web"
+                    android:autoLink="web"
                     />
 
 <!--        <Button-->
@@ -70,8 +80,17 @@
 <!--            android:layout_height="0dp"-->
 <!--            android:layout_weight="1"-->
 <!--            android:text="3" />-->
-                <LinearLayout
-                    android:layout_gravity="center"
+        <EditText
+            android:id="@+id/editTextComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese un comentario"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <LinearLayout
+                    android:layout_gravity="center|bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
