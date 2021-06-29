@@ -71,25 +71,38 @@
 <!--            android:layout_weight="1"-->
 <!--            android:text="3" />-->
                 <LinearLayout
-                    android:weightSum="1"
-                    android:layout_weight="0"
-                    android:layout_gravity="bottom"
-                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <Button
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnChoose"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Seleccionar" />
+                        android:clickable="true"
+                        app:srcCompat="?android:attr/actionModeFindDrawable" />
 
-                    <Button
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnUpload"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subir" />
+
+                        android:clickable="true"
+                        app:srcCompat="@android:drawable/stat_sys_upload" />
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnChoose"-->
+<!--                        android:layout_weight="0.5"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Seleccionar" />-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnUpload"-->
+<!--                        android:layout_weight="0.5"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Subir" />-->
                 </LinearLayout>
     </LinearLayout>
 

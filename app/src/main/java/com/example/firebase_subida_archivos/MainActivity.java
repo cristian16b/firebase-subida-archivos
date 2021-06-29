@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FileDownloadTask;
@@ -57,7 +58,7 @@ import static android.R.layout.simple_list_item_1;
 public class MainActivity extends AppCompatActivity {
 
     // views for button
-    private Button btnSelect, btnUpload;
+    private FloatingActionButton btnSelect, btnUpload;
 
     // view for image view
     private ImageView imageView;
