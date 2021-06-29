@@ -268,24 +268,28 @@ public class MainActivity extends AppCompatActivity {
             File myFile = new File(uriString);
             displayName = null;
 
-            if (uriString.startsWith("content://")) {
-                Cursor cursor = null;
-                try {
-                    cursor = this.getContentResolver().query(uri, null, null, null, null);
-                    if (cursor != null && cursor.moveToFirst()) {
-                        displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                    }
-                } finally {
-                    cursor.close();
-                }
-            } else if (uriString.startsWith("file://")) {
-                displayName = myFile.getName();
-            }
+            // obtengo el nombre del archivo
+            obtenerNombreArchivo(uri,uriString,myFile);
 
             String detalle = "Archivo seleccionado: " + displayName;
-            Log.i("detalle",displayName);
 
             detallesText.setText(detalle);
+        }
+    }
+
+    private void obtenerNombreArchivo(Uri uri,String uriString,File myFile) {
+        if (uriString.startsWith("content://")) {
+            Cursor cursor = null;
+            try {
+                cursor = this.getContentResolver().query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        } else if (uriString.startsWith("file://")) {
+            displayName = myFile.getName();
         }
     }
 
@@ -369,6 +373,12 @@ public class MainActivity extends AppCompatActivity {
                                                     + (int)progress + "%");
                                 }
                             });
+        } else {
+            Toast
+                    .makeText(MainActivity.this,
+                            "Seleccione un archivo",
+                            Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
