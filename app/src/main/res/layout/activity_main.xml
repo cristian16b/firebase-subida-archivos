@@ -87,7 +87,7 @@
             android:ems="10"
             android:hint="Ingrese un comentario"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="" />
 
         <LinearLayout
                     android:layout_gravity="center|bottom"
