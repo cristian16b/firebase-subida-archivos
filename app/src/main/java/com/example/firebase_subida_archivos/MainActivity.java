@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -45,6 +48,9 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +58,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import com.example.firebase_subida_archivos.miFile;
 
 import static android.R.layout.simple_list_item_1;
 
@@ -84,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayAdapter<String> arrayAdapter;
 
+    EditText editTextComentario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         btnUpload = findViewById(R.id.btnUpload);
 //        imageView = findViewById(R.id.imgView);
         detallesText = findViewById(R.id.detallesArchivo);
+        editTextComentario = findViewById(R.id.editTextComentario);
 
 
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
@@ -142,7 +152,16 @@ public class MainActivity extends AppCompatActivity {
 //                                FirebaseAuth.getInstance().getCurrentUser().getEmail(),
 //                                Toast.LENGTH_LONG)
 //                        .show();
-                uploadFile();
+//                Log.i("mensaje",input.getText().toString());
+
+                if(editTextComentario.getText().toString().length() == 0) {
+                    Toast.makeText(getApplicationContext(),
+                            "Debe ingresar una descripción del archivo.",
+                            Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    uploadFile();
+                }
             }
         });
 
@@ -365,6 +384,54 @@ public class MainActivity extends AppCompatActivity {
                                 public void onSuccess(
                                         UploadTask.TaskSnapshot taskSnapshot)
                                 {
+
+                                    //guardamos en realtime la info
+//                                    copiado del otro proyecto
+//                                    FirebaseDatabase.getInstance().getReference().push()
+//                                            .setValue(new ChatMessage(input.getText().toString(),
+//                                                    FirebaseAuth.getInstance()
+//                                                            .getCurrentUser()
+//                                                            .getDisplayName())
+//                                            );
+
+
+
+                                    String usuarioId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//                                    JSONObject json = new JSONObject();
+//                                    JSONObject item = new JSONObject();
+//                                    try {
+//                                        item.put("information", "test");
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    try {
+//                                        json.put("name", "student");
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    FirebaseDatabase.getInstance().getReference()
+//                                            .push()
+//                                            .setValue(usuarioId);
+
+                                    String usuarioEmail = FirebaseAuth.getInstance()
+                                            .getCurrentUser()
+                                            .getEmail();
+
+                                    miFile file = new miFile(
+                                            displayName,
+                                            editTextComentario.getText().toString(),
+                                            usuarioEmail
+                                    );
+                                    Log.i("nombre",editTextComentario.getText().toString());
+                                    Log.i("mifile",file.toString());
+
+                                     FirebaseDatabase.getInstance().getReference().child(usuarioId).push()
+                                            .setValue(file);
+
+
+
+
+                                    editTextComentario.setText("");
 
                                     // Image uploaded successfully
                                     // Dismiss dialog
