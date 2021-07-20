@@ -37,6 +37,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -102,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        lv1=findViewById(R.id.listaArchivos);
-        lista = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
-        lv1.setAdapter(arrayAdapter);
+//        lv1=findViewById(R.id.listaArchivos);
+//        lista = new ArrayList<>();
+//        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
+//        lv1.setAdapter(arrayAdapter);
 
         // initialise views
         btnSelect = findViewById(R.id.btnChoose);
@@ -176,62 +181,108 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected void mostrarArchivos() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.i("usuario",user.getEmail());
 
-        if(!lista.isEmpty()) {
-            lista.clear();
-        }
+
+        DatabaseReference db =
+                FirebaseDatabase.getInstance().getReference().child(user.getUid());
+
+        lv1=findViewById(R.id.listaArchivos);
+        lista = new ArrayList<>();
+        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
+        lv1.setAdapter(arrayAdapter);
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+//                Log.i("info",dataSnapshot.toString());
+                  miFile mensaje = dataSnapshot.getValue(miFile.class);
+//                 String mensaje = "hola";
+                  lista.add(mensaje.toStringItem());
+                  arrayAdapter.notifyDataSetChanged();
+//                mensaje.setMessageText();
+                  lv1.setSelection(lv1.getAdapter().getCount()-1);
+                  lv1.setSelection(lv1.getAdapter().getCount()-1);
+//                int taglog = Log.d("TAGLOG", mensaje.toString() + "");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d("TAGLOG","onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("TAGLOG", "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d("TAGLOG", "onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("TAGLOG","Error!", databaseError.toException());
+            }
+        };
+
+        db.addChildEventListener(childEventListener);
+//        if(!lista.isEmpty()) {
+//            lista.clear();
+//        }
+////
 //
-
-//       Si recorro los archivos que subio el usuario xxxxx@correo.com uso
-        StorageReference listRef = storage.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
-
-//        Si quiero recorrer los directorios en el indice del storage uso:
-//        StorageReference listRef = storage.getReference().child("/");
-
-        listRef.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-
-                        Log.i("ingreso","uff magia algo paso");
-
-//                       Primer bucle recorre directorios
-                        for (StorageReference prefix : listResult.getPrefixes()) {
-                            // All the prefixes under listRef.
-                            // You may call listAll() recursively on them.
-                            Log.i("ingreso","bucle 1 vuelta " + prefix.getName());
-                        }
-
-//                        segundo bucle recorre los archivos
-                        for (StorageReference item : listResult.getItems()) {
-                            // All the items under listRef.
-                            String i = item.getName();
-                            Log.i("ingreso","bucle 2 vuelta"+i + item.getName());
-
-//                            donwloadFile(i);
-
-                            lista.add(item.getName());
+////       Si recorro los archivos que subio el usuario xxxxx@correo.com uso
+//        StorageReference listRef = storage.getReference().child(FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/");
+////
+//////        Si quiero recorrer los directorios en el indice del storage uso:
+////        StorageReference listRef = storage.getReference().child("/");
+////
+//        listRef.listAll()
+//                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+//                    @Override
+//                    public void onSuccess(ListResult listResult) {
+//
+//                        Log.i("ingreso","uff magia algo paso");
+//
+////                       Primer bucle recorre directorios
+//                        for (StorageReference prefix : listResult.getPrefixes()) {
+//                            // All the prefixes under listRef.
+//                            // You may call listAll() recursively on them.
+//                            Log.i("ingreso","bucle 1 vuelta " + prefix.getName());
+//                        }
+//
+////                        segundo bucle recorre los archivos
+//                        for (StorageReference item : listResult.getItems()) {
+//                            // All the items under listRef.
+//                            String i = item.getName();
+//                            Log.i("ingreso","bucle 2 vuelta"+i + item.getName());
+//
+////                            donwloadFile(i);
+//
+//                            lista.add(item.getName());
+////                            arrayAdapter.notifyDataSetChanged();
+////                            Log.i("vector",lista.toString());
+//                        }
+//
+//                        if(!lista.isEmpty()) {
 //                            arrayAdapter.notifyDataSetChanged();
-//                            Log.i("vector",lista.toString());
-                        }
-
-                        if(!lista.isEmpty()) {
-                            arrayAdapter.notifyDataSetChanged();
-                       }
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Uh-oh, an error occurred!
-                                        Toast
-                        .makeText(MainActivity.this,
-                                "Ocurrio un error al intentar recuperar los archivos, cierre session a intente ingresar de nuevo.",
-                                Toast.LENGTH_LONG)
-                        .show();
-                    }
-                });
+//                       }
+//
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        // Uh-oh, an error occurred!
+//                                        Toast
+//                        .makeText(MainActivity.this,
+//                                "Ocurrio un error al intentar recuperar los archivos, cierre session a intente ingresar de nuevo.",
+//                                Toast.LENGTH_LONG)
+//                        .show();
+//                    }
+//                });
     }
 
     public void logOut(View view) {
@@ -413,6 +464,8 @@ public class MainActivity extends AppCompatActivity {
 //                                            .push()
 //                                            .setValue(usuarioId);
 
+                                    Task<Uri> downloadUri = ref.getDownloadUrl();
+
                                     String usuarioEmail = FirebaseAuth.getInstance()
                                             .getCurrentUser()
                                             .getEmail();
@@ -420,7 +473,8 @@ public class MainActivity extends AppCompatActivity {
                                     miFile file = new miFile(
                                             displayName,
                                             editTextComentario.getText().toString(),
-                                            usuarioEmail
+                                            usuarioEmail,
+                                            downloadUri.toString()
                                     );
                                     Log.i("nombre",editTextComentario.getText().toString());
                                     Log.i("mifile",file.toString());
