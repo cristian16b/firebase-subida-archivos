@@ -3,6 +3,7 @@ package com.example.firebase_subida_archivos;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 
+import java.io.Serializable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 
-public class miFile {
+public class miFile  implements Serializable {
 
     private String nombreFile;
     private String descripcionUser;

@@ -92,11 +92,15 @@ public class MainActivity extends AppCompatActivity {
     //lista de archivos subidos
     private ListView lv1;
 
-    private ArrayList lista;
+//    private ArrayList lista;
 
     ArrayAdapter<String> arrayAdapter;
 
+    private ArrayList<miFile> lista = new ArrayList<>();
+
     EditText editTextComentario;
+
+    private AtomPayListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,13 +174,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
-                donwloadFile(lv1.getItemAtPosition(i).toString());
-//                Log.i("seleccionado=",lv1.getItemAtPosition(i).toString());
-            }
-        });
+//        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
+//                donwloadFile(lv1.getItemAtPosition(i).toString());
+////                Log.i("seleccionado=",lv1.getItemAtPosition(i).toString());
+//            }
+//        });
+    }
+
+    public void removeAtomPayOnClickHandler(View v) {
+        miFile itemToRemove = (miFile) v.getTag();
+        adapter.remove(itemToRemove);
     }
 
 
@@ -188,21 +197,30 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference db =
                 FirebaseDatabase.getInstance().getReference().child(user.getUid());
 
-        lv1=findViewById(R.id.listaArchivos);
-        lista = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
-        lv1.setAdapter(arrayAdapter);
+//        lv1=findViewById(R.id.listaArchivos);
+
+//        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
+//        lv1.setAdapter(arrayAdapter);
+//        lv1.setAdapter(new MyCustomAdapter(lista,this) );
+
+        ListView atomPaysListView = (ListView)findViewById(R.id.listaArchivos);
+        adapter = new AtomPayListAdapter(MainActivity.this, lista);
+
+
+        atomPaysListView.setAdapter(adapter);
+
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
 //                Log.i("info",dataSnapshot.toString());
                   miFile mensaje = dataSnapshot.getValue(miFile.class);
 //                 String mensaje = "hola";
-                  lista.add(mensaje.toStringItem());
-                  arrayAdapter.notifyDataSetChanged();
+//                Log.i("mifile",mensaje.toStringItem());
+                  lista.add(mensaje);
+                  adapter.notifyDataSetChanged();
 //                mensaje.setMessageText();
-                  lv1.setSelection(lv1.getAdapter().getCount()-1);
-                  lv1.setSelection(lv1.getAdapter().getCount()-1);
+//                  lv1.setSelection(lv1.getAdapter().getCount()-1);
+//                  lv1.setSelection(lv1.getAdapter().getCount()-1);
 //                int taglog = Log.d("TAGLOG", mensaje.toString() + "");
             }
 
@@ -542,48 +560,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void donwloadFile(String nombre){
-        String path = FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+nombre;
-        Log.i("ruta",path);
-        StorageReference fileRef = storageReference.child(path);
-
-
-        // Code for showing progressDialog while uploading
-        ProgressDialog progressDialog
-                = new ProgressDialog(this);
-        progressDialog.setTitle("Bajando...");
-        progressDialog.show();
-
-        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Data for "images/island.jpg" is returns, use this as needed
-
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
+//        String path = FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+nombre;
+//        Log.i("ruta",path);
+//        StorageReference fileRef = storageReference.child(path);
+//
+//
+//        // Code for showing progressDialog while uploading
+//        ProgressDialog progressDialog
+//                = new ProgressDialog(this);
+//        progressDialog.setTitle("Bajando...");
+//        progressDialog.show();
+//
+//        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                // Data for "images/island.jpg" is returns, use this as needed
+//
+//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                startActivity(intent);
+//
+////                Toast
+////                        .makeText(MainActivity.this,
+////                                "Archivo descargado!!",
+////                                Toast.LENGTH_LONG)
+////                        .show();
+////                Log.i("archivo url",uri.toString());
+////                detallesText.setText(uri.toString());
+//
+//                progressDialog.dismiss();
+//            }
+//
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                progressDialog.dismiss();
 //                Toast
 //                        .makeText(MainActivity.this,
-//                                "Archivo descargado!!",
+//                                "Ocurrio un error: " + exception.getMessage(),
 //                                Toast.LENGTH_LONG)
 //                        .show();
-//                Log.i("archivo url",uri.toString());
-//                detallesText.setText(uri.toString());
-
-                progressDialog.dismiss();
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                progressDialog.dismiss();
-                Toast
-                        .makeText(MainActivity.this,
-                                "Ocurrio un error: " + exception.getMessage(),
-                                Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
-
+//            }
+//        });
+//
     }
 }
