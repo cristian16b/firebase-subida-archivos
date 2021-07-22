@@ -48,11 +48,10 @@ public class AtomPayListAdapter  extends BaseAdapter {
 
         holder = new AtomPaymentHolder();
         holder.atomPayment = items.get(position);
-        holder.removePaymentButton = (ImageButton)row.findViewById(R.id.atomPay_removePay);
+        holder.removePaymentButton = (ImageButton)row.findViewById(R.id.btnRowDonwload);
         holder.removePaymentButton.setTag(holder.atomPayment);
 
         holder.name = (TextView)row.findViewById(R.id.atomPay_name);
-        holder.value = (TextView)row.findViewById(R.id.atomPay_value);
 
         row.setTag(holder);
 
@@ -62,12 +61,8 @@ public class AtomPayListAdapter  extends BaseAdapter {
 
     private void setupItem(AtomPaymentHolder holder) {
         holder.name.setText(holder.atomPayment.toStringItem());
-        holder.value.setText(String.valueOf(holder.atomPayment.toStringItem()));
     }
 
-    public void remove(miFile itemToRemove) {
-//        todo
-    }
 
     public static class AtomPaymentHolder {
         miFile atomPayment;

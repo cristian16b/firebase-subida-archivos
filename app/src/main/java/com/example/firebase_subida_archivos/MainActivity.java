@@ -178,14 +178,15 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
 //                donwloadFile(lv1.getItemAtPosition(i).toString());
-////                Log.i("seleccionado=",lv1.getItemAtPosition(i).toString());
+//                Log.i("seleccionado=",lv1.getItemAtPosition(i).toString());
 //            }
 //        });
     }
 
-    public void removeAtomPayOnClickHandler(View v) {
-        miFile itemToRemove = (miFile) v.getTag();
-        adapter.remove(itemToRemove);
+
+    public void descargarArchivo(View view) {
+        miFile item = (miFile)view.getTag();
+        Log.i("archivo",item.toStringItem());
     }
 
 
