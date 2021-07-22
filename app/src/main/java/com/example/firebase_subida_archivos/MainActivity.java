@@ -186,7 +186,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void descargarArchivo(View view) {
         miFile item = (miFile)view.getTag();
-        Log.i("archivo",item.toStringItem());
+        try {
+
+            String nombre = item.getNombreFile();
+//            Log.i("archivo",nombre);
+            donwloadFile(nombre);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),
+                    "Ocurrio un error. El registro seleccionado no se encontro o no se registro correctamente el nombre del recurso.",
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
 
@@ -561,48 +572,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void donwloadFile(String nombre){
-//        String path = FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+nombre;
-//        Log.i("ruta",path);
-//        StorageReference fileRef = storageReference.child(path);
+        String path = FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+nombre;
+        Log.i("ruta",path);
+        StorageReference fileRef = storageReference.child(path);
 //
 //
 //        // Code for showing progressDialog while uploading
-//        ProgressDialog progressDialog
-//                = new ProgressDialog(this);
-//        progressDialog.setTitle("Bajando...");
-//        progressDialog.show();
-//
-//        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                // Data for "images/island.jpg" is returns, use this as needed
-//
-//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                startActivity(intent);
-//
-////                Toast
-////                        .makeText(MainActivity.this,
-////                                "Archivo descargado!!",
-////                                Toast.LENGTH_LONG)
-////                        .show();
-////                Log.i("archivo url",uri.toString());
-////                detallesText.setText(uri.toString());
-//
-//                progressDialog.dismiss();
-//            }
-//
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                progressDialog.dismiss();
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Bajando...");
+        progressDialog.show();
+
+        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Data for "images/island.jpg" is returns, use this as needed
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
 //                Toast
 //                        .makeText(MainActivity.this,
-//                                "Ocurrio un error: " + exception.getMessage(),
+//                                "Archivo descargado!!",
 //                                Toast.LENGTH_LONG)
 //                        .show();
-//            }
-//        });
+//                Log.i("archivo url",uri.toString());
+//                detallesText.setText(uri.toString());
+
+                progressDialog.dismiss();
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                progressDialog.dismiss();
+                Toast
+                        .makeText(MainActivity.this,
+                                "Ocurrio un error: " + exception.getMessage(),
+                                Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
 //
     }
 }
