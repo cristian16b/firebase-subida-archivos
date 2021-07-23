@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 import android.app.ProgressDialog;
@@ -165,12 +167,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference db =
                 FirebaseDatabase.getInstance().getReference().child(user.getUid());
 
-//        lv1=findViewById(R.id.listaArchivos);
-
-//        arrayAdapter = new ArrayAdapter<String>(this, simple_list_item_1, lista);
-//        lv1.setAdapter(arrayAdapter);
-//        lv1.setAdapter(new MyCustomAdapter(lista,this) );
-
         ListView atomPaysListView = (ListView)findViewById(R.id.listaArchivos);
         adapter = new AtomPayListAdapter(MainActivity.this, lista);
 
@@ -180,16 +176,12 @@ public class MainActivity extends AppCompatActivity {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-//                Log.i("info",dataSnapshot.toString());
                   miFile mensaje = dataSnapshot.getValue(miFile.class);
-//                 String mensaje = "hola";
-//                Log.i("mifile",mensaje.toStringItem());
                   lista.add(mensaje);
+                  Collections.reverse(lista);
                   adapter.notifyDataSetChanged();
-//                mensaje.setMessageText();
-//                  lv1.setSelection(lv1.getAdapter().getCount()-1);
-//                  lv1.setSelection(lv1.getAdapter().getCount()-1);
-//                int taglog = Log.d("TAGLOG", mensaje.toString() + "");
+
+//                  atomPaysListView.setSelection(atomPaysListView.getAdapter().getCount()-1);
             }
 
             @Override
@@ -300,14 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
-
-//                Toast
-//                        .makeText(MainActivity.this,
-//                                "Archivo descargado!!",
-//                                Toast.LENGTH_LONG)
-//                        .show();
-//                Log.i("archivo url",uri.toString());
-//                detallesText.setText(uri.toString());
 
                 progressDialog.dismiss();
             }
