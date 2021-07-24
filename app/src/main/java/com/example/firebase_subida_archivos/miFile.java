@@ -81,7 +81,9 @@ public class miFile  implements Serializable {
     }
 
     public String toStringItem() {
-        return convertTime(this.messageTime) + "\n" + this.nombreFile + "\n" + this.descripcionUser;
+        return convertTime(this.messageTime) + "\n" + this.nombreFile + "\n" + this.descripcionUser
+                +"\n"+"Subido por: "+this.getNombreUsuario()+"\n"
+                ;
     }
 
     public String getMessageTimeString() { return convertTime(messageTime); }
